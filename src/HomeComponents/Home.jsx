@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TodoForm extends Component {
+class Home extends Component {
   render() {
     return (
       <div>
@@ -10,4 +10,4 @@ class TodoForm extends Component {
   }
 }
 
-export default TodoForm;
+export default Home;
