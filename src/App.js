@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Switch, Route} from 'react-router';
 import {withRouter} from 'react-router-dom';
-
+import './App.css';
 import Form from './Components/LogRegForm'
 import NavBar from './Components/NavBar'
 import HomeContainer from './HomeComponents/HomeContainer'
@@ -13,7 +13,8 @@ class App extends Component {
   state = {
     user: {},
     token: '',
-    searchValue: ''
+    searchValue: '',
+    categories: []
   }
 
   componentDidMount() {
@@ -34,17 +35,26 @@ class App extends Component {
           this.setState({
             user: data.user,
             token: data.token
-          }
-          , () => {
+          }, () => {
             this.props.history.push("/home")
-          }
-          )
-        }
+          })
+        // console.log(data)
+        }}
+      )
+
+      fetch("http://localhost:3000/categories")
+      .then(resp => resp.json())
+      .then(allCats => {
+        this.setState({
+          categories: allCats
+        })
       })
+      
     }
     else{
       this.props.history.push("/login")
     }
+
   }
 
 
@@ -112,7 +122,34 @@ class App extends Component {
   }
 
   handleTodoSubmit = (newTodoSentUp) => {
-    console.log(newTodoSentUp)
+    // console.log(newTodoSentUp)
+    let {title, description, category} = newTodoSentUp
+    let {user} = this.state
+    // console.log(this.state.user)
+    let newTodoObj = {
+      title,
+      description,
+      user_id: user.id,
+      category_id: category
+    }
+    fetch(`http://localhost:3000/todo_tasks`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        Accept: 'applicaton/json'
+      },
+      body: JSON.stringify(newTodoObj)
+    })
+    .then(resp => resp.json())
+    .then(newTodoObj => {
+      let tdt = [...this.state.user.todo_tasks, newTodoObj]
+        this.setState({
+          user: {
+            ...user,
+            todo_tasks: tdt
+          }
+        })
+    })
   }
 
   handleSearchState = (searchValueSentUp) => {
@@ -122,20 +159,23 @@ class App extends Component {
     })
   }
 
+
   filteredToDos = () => {
-    // let {todo_tasks} = this.state.user
+    let {todo_tasks} = this.state.user
+    // if (this.state.user){
     let keptTodo = this.state.user.todo_tasks.filter((todoObj) => {
       return todoObj.category.name.toLowerCase().includes(this.state.searchValue.toLowerCase())
     })
-    return keptTodo
+    return keptTodo 
+    // }
   }
 
   renderHomeContainer = (routerProps) => {
-    return <HomeContainer keptTodos={this.filteredToDos()} token={this.state.token} searchValue={this.state.searchValue} handleSearch={this.handleSearchState} user={this.state.user} />
+    return <HomeContainer handleTodoSubmit={this.handleTodoSubmit} keptTodos={Object.keys(this.state.user).length !== 0 ? this.filteredToDos(): []} allCat={this.state.categories} token={this.state.token} searchValue={this.state.searchValue} handleSearch={this.handleSearchState} user={this.state.user} />
   }
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     return (
       <div>
         <NavBar/>

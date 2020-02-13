@@ -7,7 +7,8 @@ class TodoCard extends Component {
         // console.log(this.props.todoData)
         let {description, completed, category:{name}, title} = this.props.todoData
         return (
-            <div>
+            <div className="card">
+                <button className="del-btn">x</button>
                 <h2>Title:</h2>
                 <p>{title}</p>
                 <h2>Description:</h2>
