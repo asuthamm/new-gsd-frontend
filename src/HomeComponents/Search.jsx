@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
+
 
 class Search extends Component {
-  render() {
-    return (
-      <div>
-        
-      </div>
-    );
-  }
+    
+    handleChange = (e) => {
+        this.props.handleSearch(e.target.value)
+    }
+
+    render() {
+        return (
+                <div className="ui search">
+                    <div className="ui icon input">
+                        <input className="prompt" value={this.props.searchValue} onChange={this.handleChange} />
+                        <i className="search icon" />
+                    </div>
+                </div>
+        );
+    }
 }
 
-export default Search;
+export default withRouter(Search);
