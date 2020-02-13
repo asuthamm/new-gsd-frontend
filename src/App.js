@@ -111,6 +111,10 @@ class App extends Component {
     })
   }
 
+  handleTodoSubmit = (newTodoSentUp) => {
+    console.log(newTodoSentUp)
+  }
+
   handleSearchState = (searchValueSentUp) => {
     // console.log(searchValueSentUp)
     this.setState({
