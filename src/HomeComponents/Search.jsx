@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
+import { Container } from 'semantic-ui-react'
+
 
 
 class Search extends Component {
@@ -10,11 +12,12 @@ class Search extends Component {
 
     render() {
         return (
-                <div className="ui search">
-                    <div className="ui icon input">
-                        <input className="prompt" value={this.props.searchValue} onChange={this.handleChange} />
-                        <i className="search icon" />
-                    </div>
+                <div >
+                        <label className="add-toy-form" for="inpt_search">
+                            Search
+                            <input className="add-toy-form" value={this.props.searchValue} onChange={this.handleChange} />
+                            <i className="search icon" />
+                        </label>
                 </div>
         );
     }

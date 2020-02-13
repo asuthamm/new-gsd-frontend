@@ -4,15 +4,18 @@ import {withRouter} from 'react-router-dom';
 
 class TodoForm extends Component {
 
-  state = {
-    state: "",
-    description: "",
-    category: ""
+  state = { 
+    title: "", 
+    description: "", 
+    category: null
   }
+
+  
 
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log()
+    this.props.handleTodoSubmit(this.state)
+    // console.log(this.state)
   }
 
   handleChange = (e) => {
@@ -23,19 +26,23 @@ class TodoForm extends Component {
   }
 
   render() {
-    console.log(this.props)
+    let showCat = this.props.allCat.map((catObj) => {
+      return <option key={catObj.id} value={catObj.id}>{catObj.name}</option>
+    })
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-        <h1></h1>
+      <div className="container">
+        <form className="add-toy-form" onSubmit={this.handleSubmit}>
           <label htmlFor="title">Title:</label>
           <input type="text" name="title" value={this.title} onChange={this.handleChange}/>
 
           <label htmlFor="description">Description:</label>
-          <input type="text" name="description" value={this.description} onChange={this.handleChange}/>
+          <input type="textarea" name="description" value={this.description} onChange={this.handleChange}/>
 
           <label htmlFor="category">Category:</label>
-          <input type="text" name="category" value={this.category} onChange={this.handleChange}/>
+          {/* <input type="text" name="category" value={this.category} onChange={this.createCategory}/> */}
+          <select value={this.state.category} name="category" onChange={this.handleChange}>
+              {showCat}
+          </select>
 
           <input type="submit" value="Submit"/>
         </form>
